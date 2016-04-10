@@ -79,7 +79,7 @@ public class MetricDao {
 		Metric t = new Metric();
 
 		t.setDeviceID(row.getString("device_id"));
-		t.setMetricTime(row.getDate("metric_time"));
+		t.setMetricTime(row.getTimestamp("metric_time"));
 		t.setMetricName(row.getString("metric_name"));
 		t.setMetricValue(row.getDecimal("metric_value"));
 
