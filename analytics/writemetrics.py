@@ -41,6 +41,7 @@ def process(time, rdd):
         readingsDataFrame.show(10)
         readingsDataFrame.write.format("org.apache.spark.sql.cassandra").\
             mode('append').options(table="raw_metrics", keyspace="metrics").save()
+        readingsDataFrame.unpersist()
     except:
         pass
 
