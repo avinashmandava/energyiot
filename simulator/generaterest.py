@@ -6,10 +6,14 @@ from time import sleep
 import sys
 import json
 
+if (len(sys.argv) < 5):
+    sys.exit('Usage: %s <topic> <sensorid_offset> <# of sensors> <interval>' % sys.argv[0])
+
 #initialize variables from command input
 topic = sys.argv[1]
-num_sensors = int(sys.argv[2])
-interval = float(sys.argv[3])
+sensorid_offset = int(sys.argv[2])
+num_sensors = int(sys.argv[3])
+interval = float(sys.argv[4])
 
 url = 'http://localhost:8082/topics/'+topic
 headers = {'Content-Type' : 'application/vnd.kafka.avro.v1+json'}
@@ -21,11 +25,11 @@ def get_value_schema_id():
     return int(requests.post(url,data=reading_string,headers=headers).json()['value_schema_id'])
 
 #simulate sensors
-def simulate_rest_writes(num_sensors, interval):
+def simulate_rest_writes(sensorid_offset, num_sensors, interval):
     schema_id = get_value_schema_id()
     while(True):
         time = datetime.datetime.now().strftime("%s")
-        for x in range (1,num_sensors+1):
+        for x in range (sensorid_offset, num_sensors+sensorid_offset):
             reading = [str(x),time,"KwH",str(random.uniform(0.1, 1.9))]
             #construct data json from reading, passing result of get_value_schema_id() as the value_schema_id.
             reading_payload = json.dumps({"value_schema_id": schema_id, "records": [{"value": {"device_id": reading[0],"metric_time": reading[1],"metric_name": reading[2],"metric_value": reading[3]}}]})
@@ -36,7 +40,7 @@ def simulate_rest_writes(num_sensors, interval):
 
 def main():
     #simulate_rest_writes(num_sensors)
-    simulate_rest_writes(num_sensors,interval)
+    simulate_rest_writes(sensorid_offset, num_sensors, interval)
 
 if __name__ == "__main__":
     main()
