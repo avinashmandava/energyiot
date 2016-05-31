@@ -80,7 +80,7 @@ public class RollupDao {
 		Rollup t = new Rollup();
 
 		t.setDeviceID(row.getString("device_id"));
-		t.setMetricDay(row.getDate("metric_day"));
+		t.setMetricDay(row.getTimestamp("metric_day"));
 		t.setMetricName(row.getString("metric_name"));
 		t.setMetricAvg(row.getDecimal("metric_avg"));
 		t.setMetricMin(row.getDecimal("metric_min"));
